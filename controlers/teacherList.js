@@ -7,7 +7,6 @@ const teacherList = async (req, res, next) => {
     const {
       page = 1,
       limit = 10,
-      sort = "-createdAt", // default: latest first
       name, // search by name
       subject, // filter by subject
       experience, // filter by experience

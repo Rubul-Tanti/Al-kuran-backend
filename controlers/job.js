@@ -67,7 +67,6 @@ const updateJob = async (req, res, next) => {
 };
 const fetchPost=async(req,res)=>{
   try{const allposts=await jobModule.find()
-    console.log("rubul")
   if(allposts.length<0){
     return res.status(500).json({success:false,message:"internal Error"})
   }

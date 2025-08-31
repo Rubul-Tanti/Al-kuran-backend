@@ -3,7 +3,6 @@ const Env=require("../config/envConfig")
 const { ApiError } = require("../middleware/Error")
 const connectToDb=async()=>{
     try{
-
         await mongoose.connect(Env.mongourl)
         console.log("connect to db")
     }catch(e){
