@@ -2,7 +2,7 @@ const cors = require("cors");
 
 const corsConfig = cors({
   origin: (origin, callback) => {
-    const allowedOrigin = ["http://localhost:5173"];
+    const allowedOrigin = ["http://localhost:5173","https://al-quran-kappa-one.vercel.app/"];
     if (!origin || allowedOrigin.includes(origin)) {
       callback(null,true);  
     } else {
