@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
-const Env = require("../config/envConfig");
+const env=require("dotenv")
+env.config()
 const { ApiError } = require("../middleware/Error");
 
 const connectToDb = async () => {
   try {
-    console.log(Env.mongourl)
     mongoose.set("strictQuery", true); // optional, but recommended
-    await mongoose.connect(Env.mongourl, {
+    await mongoose.connect(process.env.MONGOURL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
