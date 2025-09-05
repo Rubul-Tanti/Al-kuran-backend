@@ -1,10 +1,13 @@
 const mongoose = require("mongoose");
+const applicant={
+ id:{ type: mongoose.Types.ObjectId, ref: "User" },name:{type:String},proposal:{type:String},profilePic:{type:String,}}
 
 const jobSchema = new mongoose.Schema({
   postedBy:{name:{type:String,required:true}, id:{
     type: mongoose.Types.ObjectId,
     ref: "student", // assuming you have a User model
     required: true,
+  },profilePic:{type:String
   }},
   postedAt: {
     type: Date,
@@ -39,7 +42,7 @@ const jobSchema = new mongoose.Schema({
     { type: mongoose.Types.ObjectId, ref: "User" } // users in interview stage
   ],
   applicants: [
-    { type: mongoose.Types.ObjectId, ref: "User" } // applied users
+   applicant
   ],
 });
 

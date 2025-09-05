@@ -30,7 +30,6 @@ const teacherList = async (req, res, next) => {
     // Query DB
     const teachers = await teacherModel
       .find(filter)
-      .sort(sort)
       .skip(skip)
       .limit(Number(limit));
 

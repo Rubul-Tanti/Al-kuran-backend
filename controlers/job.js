@@ -4,14 +4,14 @@ const { ApiError } = require("../middleware/Error");
 // Create Job
 const createJob = async (req, res, next) => {
   try {
-    const { name, id, title, description, language, course, budget } = req.body;
+    const { name, id, title, description, language, course, budget ,profilePic} = req.body;
     console.log(req.body)
-    if (!name || !id || !title || !description || !language || !course || !budget) {
+    if (!name || !id || !title || !description || !language || !course || !budget||!profilePic) {
       return res.status(400).json({ message: "Enter all fields", success: false });
     }
 
     const job = await jobModule.create({
-      postedBy: { name, id },
+      postedBy: { name, id,profilePic },
       title,
       description,
       budget,
@@ -66,17 +66,26 @@ const updateJob = async (req, res, next) => {
   }
 };
 const fetchPost=async(req,res)=>{
-  try{const allposts=await jobModule.find()
+  const {limit}=req.params
+  const skip=req.params.skip||0
+  console.log(skip,limit)
+
+  try{const allposts=await jobModule.find().skip(skip||0).limit(limit||20)
+
   if(allposts.length<0){
     return res.status(500).json({success:false,message:"internal Error"})
   }
-  res.status(200).json({success:true,message:"successfully fetched Data",data:allposts})
+  const total = await jobModule.countDocuments();
+    const hasNext = skip + limit < total;
+    const hasPrev=skip>0
+  res.status(200).json({success:true,message:"successfully fetched Data",data:{allposts,hasNext,hasPrev}})
 }catch(e){
   throw new ApiError(500,e.message)
 }
 }
 const fetchMyPosts=async(req,res)=>{
   try{
+    console.log("pass")
     const allposts = await jobModule.find({
   "postedBy.id": req.body.id,
   "postedBy.name": req.body.name,
@@ -89,5 +98,52 @@ const fetchMyPosts=async(req,res)=>{
   throw new ApiError(500,e.message)
 }
 }
+const fetchJob = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ success: false, message: "Job ID is required" });
+    }
 
-module.exports = { createJob, deleteJob, updateJob,fetchPost,fetchMyPosts };
+    const job = await jobModule.findById(id);
+
+    if (!job) {
+      return res.status(404).json({ success: false, message: "No job found" });
+    }
+
+    return res.status(200).json({ success: true, data: job });
+
+  } catch (error) {
+    console.error("Error fetching job:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+const SendProposal=async(req,res)=>{
+try{
+  console.log("pass")
+  const {proposal,postId,userId,username,userImage}=req.body
+  if(!proposal||!postId||!userId||!username||!userImage){
+    return res.status(500).json({message:'Enter All Fields'})
+  }
+  const post = await jobModule.findByIdAndUpdate(
+      postId,
+      {
+        $push: {
+          applicants: {
+            name: username,
+            id: userId,
+            profilePic: userImage,
+            proposal,
+          },
+        },
+      },
+      { new: true } // return updated doc
+    );
+  if(!post){throw new ApiError("internal server Error ",501) } 
+  res.status(200).json({success:true,message:"proposal sent successfully"})
+}catch(e){ApiError(e.message,500)}
+}
+
+
+module.exports = { createJob, deleteJob, updateJob,fetchPost,fetchMyPosts ,fetchJob,SendProposal};

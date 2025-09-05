@@ -5,7 +5,7 @@ const uploadToCloudinary=async(files)=>{
              const uploadResult = await cloudinary.uploader.upload(files.path,{
                public_id:files.fieldname
            })
-           return uploadResult.url
+           return uploadResult.secure_url
     }
     catch(e){
         throw new ApiError(e.message,500)
