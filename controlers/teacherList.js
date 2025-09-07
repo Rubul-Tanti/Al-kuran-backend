@@ -49,4 +49,18 @@ const teacherList = async (req, res, next) => {
   }
 };
 
-module.exports = { teacherList };
+const teacherDetails=async(req,res)=>{
+  try{
+    const {id}=req.params
+    console.log(id)
+    if(!id){return res.status(500).json({message:"enter param",success:false})}
+    const teacher=await teacherModel.findById(id)
+    if(!teacher){
+      {return res.status(500).json({message:"teacher not found",success:false})}
+    }
+    res.status(200).json({success:true,data:teacher})
+  }catch(e){
+    throw new ApiError(e.message,500)
+  }
+}
+module.exports = { teacherList,teacherDetails };

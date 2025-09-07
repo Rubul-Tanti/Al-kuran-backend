@@ -18,6 +18,8 @@ const liveClass = {
   hourlyRate: { type: String, required: true }
 }
 
+const chat=new mongoose.Schema({name:String,profilePic:String,id:mongoose.Schema.ObjectId,chatId:mongoose.Schema.ObjectId})
+
 const teacherSchema = new mongoose.Schema({
   password: { type: String, required: true, min: [8, "password cannot be less than 8 characters"], max: [12, "password cannot be more than 12 characters"] },
   rating: { type: Number, default: 0 },
@@ -52,6 +54,7 @@ const teacherSchema = new mongoose.Schema({
     bio: { type: String,required: true}, 
     specializations:[{type:String,required:true}],
   }
+  ,chats:[chat]
   
 })
 const teacherModel = mongoose.model("teachers", teacherSchema)

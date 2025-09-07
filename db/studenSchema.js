@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const chat=new mongoose.Schema({name:String,profilePic:String,id:mongoose.Schema.ObjectId,chatId:mongoose.Schema.ObjectId})
 
 const StudentSchema = new mongoose.Schema({
     password: { type: String, required: true },
@@ -27,7 +28,7 @@ const StudentSchema = new mongoose.Schema({
     }],role: { type: String, enum: ["student", "teacher","admin"], default: "student" },
     QtuorCourse:[{courseId:{type:mongoose.Schema.Types.ObjectId,ref:"course"},courseName:{type:String,
         required:true},courseDescription:{type:String,required:true},
-        courseDuration:{type:String,required:true}}],
+        courseDuration:{type:String,required:true}}],chats:[chat]
 })
 const StudentModel = mongoose.model("Students", StudentSchema)
 module.exports = StudentModel

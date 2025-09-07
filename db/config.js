@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const env=require("dotenv")
-env.config()
 const { ApiError } = require("../middleware/Error");
+env.config()
 
 const connectToDb = async () => {
   try {

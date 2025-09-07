@@ -90,9 +90,6 @@ const fetchMyPosts=async(req,res)=>{
   "postedBy.id": req.body.id,
   "postedBy.name": req.body.name,
 });
-  if(allposts.length<0){
-    return res.status(500).json({success:false,message:"internal Error"})
-  }
   res.status(200).json({success:true,message:"successfully fetched Data",data:allposts})
 }catch(e){
   throw new ApiError(500,e.message)
