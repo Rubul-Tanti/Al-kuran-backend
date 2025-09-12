@@ -14,24 +14,15 @@ const http=require("http")
 const app = express();
 const server=http.createServer(app)
 const port = Env.port;
-const io=new Server(server,{cors: {
-    origin: function (origin, callback) {
-      const allowedOrigins = [
-        "http://localhost:5173",
-        "https://al-quran-kappa-one.vercel.app"
-      ];
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    methods: ["GET", "POST"],
-    credentials: true
-  }, // frontend URL
-    methods: ["GET", "POST"],
-    credentials: true, // if using cookies/auth
-  })
+const io = new Server(server, {
+  cors: {
+    origin: "https://al-quran-kappa-one.vercel.app", // your Vercel frontend
+    methods: ["GET", "POST"],  // allow necessary methods
+    credentials: true          // allow cookies/headers if needed
+  },
+  transports: ["websocket"],   // force websocket to avoid Render proxy issues
+});
+
 // Core middlewares
 app.use(corsConfig);
 app.use(cookieParser());
