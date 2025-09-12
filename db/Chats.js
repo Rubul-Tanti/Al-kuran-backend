@@ -1,8 +1,8 @@
 const mongoose=require("mongoose")
 
 const chat=new mongoose.Schema({
-  sender:{user:mongoose.Types.ObjectId}
-  ,sequance:String,
+  sender:mongoose.Types.ObjectId,
+  sequance:String,
   text:String,
 type: {
       type: String,
@@ -17,12 +17,11 @@ type: {
   { _id: false }
 )
  
-const users=new mongoose.Schema({
-    user:mongoose.Types.ObjectId
-})
+
 
 const ChatSchema=new mongoose.Schema({
-  participants:[],
+  teacher:String,
+  student:String,
   messages:[chat]
 })
 

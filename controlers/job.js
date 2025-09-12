@@ -4,14 +4,14 @@ const { ApiError } = require("../middleware/Error");
 // Create Job
 const createJob = async (req, res, next) => {
   try {
-    const { name, id, title, description, language, course, budget ,profilePic} = req.body;
+    const { name, id, title, description, language, course, budget ,profilePic,socketId} = req.body;
     console.log(req.body)
-    if (!name || !id || !title || !description || !language || !course || !budget||!profilePic) {
+    if (!name || !id || !title || !description || !language || !course || !budget||!profilePic||!socketId) {
       return res.status(400).json({ message: "Enter all fields", success: false });
     }
 
     const job = await jobModule.create({
-      postedBy: { name, id,profilePic },
+      postedBy: { name, id,profilePic,socketId },
       title,
       description,
       budget,
@@ -85,14 +85,13 @@ const fetchPost=async(req,res)=>{
 }
 const fetchMyPosts=async(req,res)=>{
   try{
-    console.log("pass")
     const allposts = await jobModule.find({
   "postedBy.id": req.body.id,
   "postedBy.name": req.body.name,
 });
   res.status(200).json({success:true,message:"successfully fetched Data",data:allposts})
 }catch(e){
-  throw new ApiError(500,e.message)
+  throw new ApiError(e.message,500)
 }
 }
 const fetchJob = async (req, res) => {
@@ -141,6 +140,33 @@ try{
   res.status(200).json({success:true,message:"proposal sent successfully"})
 }catch(e){ApiError(e.message,500)}
 }
+const nothire=async(req,res)=>{
+    try {
+    const { jobId, proposalId } = req.body;
 
+    if (!jobId || !proposalId) {
+      return res.status(400).json({ success: false, message: "Job ID and Proposal ID are required" });
+    }
 
-module.exports = { createJob, deleteJob, updateJob,fetchPost,fetchMyPosts ,fetchJob,SendProposal};
+    // Find job and pull applicant with matching proposalId
+    const updatedJob = await jobModule.findByIdAndUpdate(
+      jobId,
+      { $pull: { applicants: { _id: proposalId } } },
+      { new: true }
+    );
+
+    if (!updatedJob) {
+      return res.status(404).json({ success: false, message: "Job post not found" });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Proposal deleted successfully",
+      job: updatedJob,
+    });
+  } catch (error) {
+    throw new ApiError(error.message,500)
+  }
+}
+
+module.exports = { createJob, deleteJob, updateJob,fetchPost,fetchMyPosts ,fetchJob,SendProposal,nothire};

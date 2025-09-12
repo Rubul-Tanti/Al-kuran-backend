@@ -8,7 +8,7 @@ const jobSchema = new mongoose.Schema({
     ref: "student", // assuming you have a User model
     required: true,
   },profilePic:{type:String
-  }},
+  },socketId:{type:String,requied:true}},
   postedAt: {
     type: Date,
     default: Date.now,

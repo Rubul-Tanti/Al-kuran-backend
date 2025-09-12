@@ -2,15 +2,23 @@ const express = require("express");
 const cloudinaryConfig = require("./config/cloudinaryConfig");
 const cookieParser = require("cookie-parser");
 const { globalErrorHandler } = require("./middleware/Error");
+const connectToSocket=require("./socket")
 const Env = require("./config/envConfig");
+const cors=require("cors")
 const corsConfig = require("./config/corsConfig");
 const ConnectToDb = require("./db/config");
 const router = require("./routes/index");
 const multerErrorHandler = require("./middleware/multerErrorHandler");
-
+const {Server}=require("socket.io")
+const http=require("http")
 const app = express();
+const server=http.createServer(app)
 const port = Env.port;
-
+const io=new Server(server,  {cors: {
+    origin: "http://localhost:5173", // frontend URL
+    methods: ["GET", "POST"],
+    credentials: true, // if using cookies/auth
+  }},)
 // Core middlewares
 app.use(corsConfig);
 app.use(cookieParser());
@@ -21,16 +29,12 @@ app.use(express.urlencoded({ extended: true }));
 ConnectToDb();
 cloudinaryConfig();
 
-// Routes
-app.get("/", (req, res) => {
-  res.send("hhi");
-});
 app.use("/user/v1", router);
-
+connectToSocket(io)
 // Error handlers
 app.use(multerErrorHandler);
 app.use(globalErrorHandler);
 
-app.listen(port || 3000, () => {
+server.listen(port || 3000, () => {
   console.log(`Server running on port ${port}`);
 });

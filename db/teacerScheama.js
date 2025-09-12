@@ -1,10 +1,12 @@
 const mongoose = require("mongoose")
 
 const course = {
-  classTime: { type: String, required: true },
+  startingDate:{type:Date},
+  classTime:[ { type: String, required: true }],
   hourlyRate: { type: Number },
   courseName: { type: String, required: true, enum: ["Noorani Qaida", "Arabic Course", "Tajweed Course", "Hifz Course"] },
-  duration: { type: String, required: true },
+  numberOfClass:{type:String},
+  doneNumberOfClass:{type:String}   
 }
 const liveClass = {
   studentDetail: {
@@ -18,9 +20,29 @@ const liveClass = {
   hourlyRate: { type: String, required: true }
 }
 
-const chat=new mongoose.Schema({name:String,profilePic:String,id:mongoose.Schema.ObjectId,chatId:mongoose.Schema.ObjectId})
-
+const chat=new mongoose.Schema(
+  {name:String,profilePic:String,id:mongoose.Schema.ObjectId,chatId:mongoose.Schema.ObjectId,socketId:String})
+const completed=new mongoose.Schema({
+  studentId:String,
+  studentName:String,
+  subject:String,
+  hourlyrate:String,
+  durationInDays:String,
+  numberOfClass:String,
+  endDate:String,
+})
+const classObj=new mongoose.Schema({
+  studentId:String,
+  studentName:String,
+  studentProfilePic:String,
+  classTime:String,
+  done:{type:String,default:false},
+  subject:String,
+  startingDate:{type:Date}
+  ,active:{type:Boolean,default:false}
+})
 const teacherSchema = new mongoose.Schema({
+  classes:[classObj],
   password: { type: String, required: true, min: [8, "password cannot be less than 8 characters"], max: [12, "password cannot be more than 12 characters"] },
   rating: { type: Number, default: 0 },
   verified: { type: Boolean, default: false },
@@ -48,13 +70,18 @@ const teacherSchema = new mongoose.Schema({
   profesnalDetails:{
     profesnalEmail:{type:String,},
     hourlyRate:{type:String,required:true},
-    course: [liveClass],
     cirtificates: [{ type: String }],
     educationDetails: { type: String, required: true },
     bio: { type: String,required: true}, 
     specializations:[{type:String,required:true}],
-  }
+  },
+  taught:[completed],
+  todayClass:[classObj],
+  currentStudents:[liveClass]
   ,chats:[chat]
+  ,socketId:String
+  ,online:{type:Boolean,default:false}
+  ,ratting:{type:String,default:"not rated yet"}
   
 })
 const teacherModel = mongoose.model("teachers", teacherSchema)
