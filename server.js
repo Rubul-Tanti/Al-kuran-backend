@@ -15,17 +15,7 @@ const app = express();
 const server=http.createServer(app)
 const port = Env.port;
 const io=new Server(server,{cors: {
-    origin: function (origin, callback) {
-      const allowedOrigins = [
-        "http://localhost:5173",
-        "https://al-quran-kappa-one.vercel.app"
-      ];
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin:"https://al-quran-kappa-one.vercel.app"
     methods: ["GET", "POST"],
     credentials: true
   }, // frontend URL
