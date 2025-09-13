@@ -49,8 +49,7 @@ const emailVerification = async (req, res) => {
 
   } catch (e) {
     console.log(req.body)
-    console.error(e);
-    res.status(500).json({ success: false, message: e });
+    res.status(500).json({ success: false, message: e.message });
   }
 };
 
