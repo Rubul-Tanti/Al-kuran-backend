@@ -14,13 +14,17 @@ const http=require("http")
 const app = express();
 const server=http.createServer(app)
 const port = Env.port;
+// "https://al-quran-kappa-one.vercel.app", // your Vercel frontend
 const io = new Server(server, {
   cors: {
-    origin: "https://al-quran-kappa-one.vercel.app", // your Vercel frontend
-    methods: ["GET", "POST"],  // allow necessary methods
-    credentials: true          // allow cookies/headers if needed
+    origin: [
+      "http://localhost:5173",                  // dev
+      "https://al-quran-kappa-one.vercel.app",  // prod
+    ],
+    methods: ["GET", "POST"],
+    credentials: true,
   },
-  transports: ["websocket"],   // force websocket to avoid Render proxy issues
+  transports: ["websocket"], // <--- IMPORTANT
 });
 
 // Core middlewares

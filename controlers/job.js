@@ -85,6 +85,7 @@ const fetchPost=async(req,res)=>{
 }
 const fetchMyPosts=async(req,res)=>{
   try{
+    console.log("pass")
     const allposts = await jobModule.find({
   "postedBy.id": req.body.id,
   "postedBy.name": req.body.name,
