@@ -4,14 +4,14 @@ const GenerateOtp = require("./createOtp");
 const Mail = require("nodemailer/lib/mailer");
 
 const transporter = nodemailer.createTransport({
-  host: process.env.EMAILCLR,
-  port: process.env.EMAILPORT,
-  secure:process.env.EMAILPORT ==465,
-  auth: {
-    user: process.env.EMAIL,
-    pass: process.env.EMAILPASS,
-  },
-});
+        service:"gmail",
+        port:"465",
+        secure:false,
+        auth:{
+          user:"hashenger@gmail.com"
+          , pass:"svtp tusp prny gbin"
+        }
+      })
 
 
 transporter.verify((error, success) => {
