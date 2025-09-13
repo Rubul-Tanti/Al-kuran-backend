@@ -4,6 +4,8 @@ const cookieParser = require("cookie-parser");
 const { globalErrorHandler } = require("./middleware/Error");
 const connectToSocket=require("./socket")
 const Env = require("./config/envConfig");
+const env=require("dotenv")
+env.config()
 const cors=require("cors")
 const corsConfig = require("./config/corsConfig");
 const ConnectToDb = require("./db/config");
