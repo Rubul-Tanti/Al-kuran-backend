@@ -12,6 +12,9 @@ const multerErrorHandler = require("./middleware/multerErrorHandler");
 const {Server}=require("socket.io")
 const http=require("http")
 const app = express();
+console.log("rubul")
+console.log(process.env.EmailPass,"rubul")
+
 const server=http.createServer(app)
 const port = Env.port;
 // "https://al-quran-kappa-one.vercel.app", // your Vercel frontend
@@ -42,7 +45,6 @@ connectToSocket(io)
 // Error handlers
 app.use(multerErrorHandler);
 app.use(globalErrorHandler);
-
 server.listen(port || 3000, () => {
   console.log(`Server running on port ${port}`);
 });

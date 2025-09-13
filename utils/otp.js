@@ -1,16 +1,18 @@
 const nodemailer = require("nodemailer");
-const {EMAILCLR,EMAIL,EMAILPASS,EMAILPORT}=require("../config/envConfig");
 const { ApiError } = require("../middleware/Error");
 const GenerateOtp = require("./createOtp");
+const Mail = require("nodemailer/lib/mailer");
+
 const transporter = nodemailer.createTransport({
   host: process.env.EMAILCLR,
-  port: Number(process.env.EMAILPORT),
-  secure: Number(process.env.EMAILPORT) === 465,
+  port: process.env.EMAILPORT,
+  secure:process.env.EMAILPORT ==465,
   auth: {
     user: process.env.EMAIL,
     pass: process.env.EMAILPASS,
   },
 });
+
 
 transporter.verify((error, success) => {
   if (error) {
@@ -25,7 +27,7 @@ const sendOtpEmail = async (email,length) => {
   try {
     const otp=await GenerateOtp(length)
     const info = await transporter.sendMail({
-      from:EMAIL,
+      from:process.env.Email,
       to:email,
       subject: `Qtuor- Your OTP Code`,
       text: `Hello,\n\nYour OTP is ${otp}. It will expire in 2 min.\n\nRegards Qtuor Team`,
@@ -47,7 +49,7 @@ const sendOtpEmail = async (email,length) => {
     return {info,otp};
   } catch (error) {
     console.error("❌ Failed to send OTP email:", error);
-    throw new ApiError(`${error.message}OTP email delivery failed`,500);
+    throw new ApiError(`OTP email delivery failed`,500);
   }
 };
 
