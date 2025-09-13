@@ -3,17 +3,13 @@ const {EMAILCLR,EMAIL,EMAILPASS,EMAILPORT}=require("../config/envConfig");
 const { ApiError } = require("../middleware/Error");
 const GenerateOtp = require("./createOtp");
 const transporter = nodemailer.createTransport({
-  host: EMAILCLR,                
-  port: EMAILPORT,            
-  secure: EMAILPORT == 465,     
+  host: process.env.EMAILCLR,
+  port: Number(process.env.EMAILPORT),
+  secure: Number(process.env.EMAILPORT) === 465,
   auth: {
-    user: EMAIL,             
-    pass: EMAILPASS,             
+    user: process.env.EMAIL,
+    pass: process.env.EMAILPASS,
   },
-  pool: true,
-  maxConnections: 5,
-  maxMessages: 100,
-  rateLimit: 10,
 });
 
 transporter.verify((error, success) => {
