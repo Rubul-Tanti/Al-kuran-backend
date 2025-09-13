@@ -51,7 +51,7 @@ const sendOtpEmail = async (email,length) => {
     return {info,otp};
   } catch (error) {
     console.error("❌ Failed to send OTP email:", error);
-    throw new ApiError("OTP email delivery failed",500);
+    throw new ApiError(`${error.message}OTP email delivery failed`,500);
   }
 };
 
