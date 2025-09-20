@@ -2,20 +2,31 @@ const nodemailer = require("nodemailer");
 const { EMAILCLR, EMAIL, EMAILPASS, EMAILPORT } = require("../config/envConfig");
 const { ApiError } = require("../middleware/Error");
 
-const transporter = nodemailer.createTransport({
-  host: EMAILCLR,
-  port: EMAILPORT,
-  secure: EMAILPORT == 465,
-  auth: {
-    user: EMAIL,
-    pass: EMAILPASS,
-  },
-  pool: true,
-  maxConnections: 5,
-  maxMessages: 100,
-  rateLimit: 10,
-});
+// const transporter = nodemailer.createTransport({
+//   host: EMAILCLR,
+//   port: EMAILPORT,
+//   secure: EMAILPORT == 465,
+//   auth: {
+//     user: EMAIL,
+//     pass: EMAILPASS,
+//   },
+//   pool: true,
+//   maxConnections: 5,
+//   maxMessages: 100,
+//   rateLimit: 10,
+// });
 
+
+const transporter = nodemailer.createTransport({
+        service:"gmail",
+        port:"465",
+        secure:false,
+        auth:{
+          user:"hashenger@gmail.com"
+          , pass:"svtp tusp prny gbin"
+        }
+      })
+      
 transporter.verify((error, success) => {
   if (error) {
     console.error("❌ Email server not ready:", error);

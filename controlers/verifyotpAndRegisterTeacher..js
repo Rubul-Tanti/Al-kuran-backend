@@ -26,6 +26,7 @@ const verifyOtpAndRegisterTeacher = async (req, res) => {
 
 
    console.log(req.body,"rubul")
+   console.log("name",name,"email:",email,"dob:",dob,"country:",country,"gender:",gender,"bio:",bio,"educationDetails:",educationDetails,"otp:",otp,languages)
     if (
       !email || !dob || !name || !bio || !gender || !otp ||
       !educationDetails || !country ||
