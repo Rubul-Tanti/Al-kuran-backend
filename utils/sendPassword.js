@@ -16,7 +16,6 @@ const { ApiError } = require("../middleware/Error");
 //   rateLimit: 10,
 // });
 
-
 const transporter = nodemailer.createTransport({
         service:"gmail",
         port:"465",
