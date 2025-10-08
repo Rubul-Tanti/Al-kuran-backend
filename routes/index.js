@@ -10,6 +10,7 @@ const upload = require("../middleware/multerUpload")
 const verifyOtpAndRegisterTeacher = require("../controlers/verifyotpAndRegisterTeacher.")
 const { teacherList, teacherDetails } = require("../controlers/teacherList")
 const { createChat, fetchChat } = require("../controlers/Chats")
+const { generateToken, listRooms, removeParticipant, endRoom } = require("../controlers/livekit")
 router.post("/email-verification",asyncError(emailVerification))
 router.post("/verifyStudentAndRegisterStudent",asyncError(verifyStudentAndRegisterStudent))
 router.post("/login",asyncError(Login))
@@ -36,5 +37,11 @@ router.post("/logout", (req, res) => {
   });
   return res.status(200).json({ message: "Logged out" });
 });
+
+router.post("/livekit/token",asyncError(generateToken));
+router.get("/livekit/rooms",asyncError( listRooms));
+router.post("/livekit/remove-participant",asyncError(removeParticipant) );
+router.post("/livekit/end-room", asyncError(endRoom));
+
 
 module.exports=router
