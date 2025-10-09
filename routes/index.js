@@ -5,7 +5,7 @@ const router=express.Router()
 const {asyncError}=require("../middleware/Error")
 const emailVerification = require("../controlers/emailVerification")
 const Login = require("../controlers/Login")
-const { fetchUser } = require("../controlers/fetchUser")
+const { fetchUser, getUserDetail } = require("../controlers/fetchUser")
 const upload = require("../middleware/multerUpload")
 const verifyOtpAndRegisterTeacher = require("../controlers/verifyotpAndRegisterTeacher.")
 const { teacherList, teacherDetails } = require("../controlers/teacherList")
@@ -42,6 +42,6 @@ router.post("/livekit/token",asyncError(generateToken));
 router.get("/livekit/rooms",asyncError( listRooms));
 router.post("/livekit/remove-participant",asyncError(removeParticipant) );
 router.post("/livekit/end-room", asyncError(endRoom));
-
+router.post("/get-user",asyncError(getUserDetail))
 
 module.exports=router

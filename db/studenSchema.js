@@ -4,7 +4,7 @@ const chat=new mongoose.Schema({name:String,profilePic:String,id:mongoose.Schema
 const StudentSchema = new mongoose.Schema({
     password: { type: String, required: true },
     persnalDetails: {
-        fullName: { type: String, required: true }
+     name: { type: String, required: true }
         , email: { type: String, required: true, unique: true },
         profileImage: { type: String, default: "https://cdn.vectorstock.com/i/500p/11/28/profile-icon-male-avatar-user-circles-vector-50791128.avif" },
         phone: { type: String }, // optional, for teacher/student contact

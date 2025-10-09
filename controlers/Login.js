@@ -42,7 +42,7 @@ const user=alreadyUser?alreadyUser:alreadyTeacher
     // data to encode in JWT
     const data = {
       id: user._id,
-      fullName: user.persnalDetails.fullName,
+      fullName: user.persnalDetails.name,
       role: user.role,
     };
 

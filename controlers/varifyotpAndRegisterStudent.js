@@ -22,7 +22,7 @@ if(otp==otpobject.otp){
  const hashedPassword = await hashPassword(password);
 const newStudent=await StudentModel.create({
     persnalDetails: {
-        fullName,
+        name:fullName,
         email
         ,gender},password:hashedPassword})
 console.log(newStudent)

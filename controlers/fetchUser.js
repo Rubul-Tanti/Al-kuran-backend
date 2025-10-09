@@ -47,4 +47,24 @@ const fetchUser = async (req, res, next) => {
   }
 };
 
-module.exports = { fetchUser };
+const getUserDetail=async(req,res)=>{
+  try{const {role,id}=req.body
+  console.log(role,id)
+  if(!role||!id){
+   return res.status(404).json({message:"somewent wrong please try again later",success:false})
+  }
+  let user;
+  if(role==="student"){
+     user =await StudentModel.findById(id)
+  }else{
+user=await teacherModel.findById(id)
+  }
+  if(!user){return res.status(401).json({message:"internal server Error",success:false})}
+res.status(200).json({message:"user fetch successfully",data:user,success:true})
+  }catch(e){
+    throw new ApiError(e.message,500)
+  }
+}
+
+module.exports = { fetchUser,getUserDetail };
+
