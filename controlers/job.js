@@ -88,6 +88,7 @@ const fetchMyPosts=async(req,res)=>{
     console.log("pass")
     const allposts = await jobModule.find({
   "postedBy.id": req.body.id,
+  // "postedBy.name": req.body.name,
 });
   res.status(200).json({success:true,message:"successfully fetched Data",data:allposts})
 }catch(e){
