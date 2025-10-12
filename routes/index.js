@@ -31,9 +31,9 @@ router.get("/chats/:id",asyncError(fetchChat))
 router.post("/logout", (req, res) => {
   res.clearCookie("refreshToken", {
     httpOnly: true,
-    secure: true,   // use true if using https
-    sameSite: "strict",
-    path: "/",      // must match the path used when setting the cookie
+    secure: true,        // MUST be true on a live site using HTTPS
+    sameSite: "None",    // <-- CHANGE THIS to allow cross-site clearing
+    path: "/",
   });
   return res.status(200).json({ message: "Logged out" });
 });
