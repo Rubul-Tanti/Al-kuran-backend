@@ -18,8 +18,8 @@ const { ApiError } = require("../middleware/Error");
 
 const transporter = nodemailer.createTransport({
         service:"gmail",
-        port:"465",
-        secure:true,
+        port:"587",
+        secure:false,
         auth:{
           user:"hashenger@gmail.com"
           , pass:"svtp tusp prny gbin"
