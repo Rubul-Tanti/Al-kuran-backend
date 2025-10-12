@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 const { EMAILCLR, EMAIL, EMAILPASS, EMAILPORT } = require("../config/envConfig");
 const { ApiError } = require("../middleware/Error");
+const transporter=require("../config/emailTransponder")
 
  const transporter = nodemailer.createTransport({
   host: EMAILCLR,

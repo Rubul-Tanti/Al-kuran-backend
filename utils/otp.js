@@ -1,17 +1,8 @@
 const nodemailer = require("nodemailer");
-const { ApiError } = require("../middleware/Error");
 const GenerateOtp = require("./createOtp");
-const Mail = require("nodemailer/lib/mailer");
-
-const transporter = nodemailer.createTransport({
-        service:"gmail",
-        port:"465",
-        secure:true,
-        auth:{
-          user:"hashenger@gmail.com"
-          , pass:"svtp tusp prny gbin"
-        }
-      })
+const { EMAILCLR, EMAIL, EMAILPASS, EMAILPORT } = require("../config/envConfig");
+const { ApiError } = require("../middleware/Error");
+const transporter=require("../config/emailTransponder")
 
 
 transporter.verify((error, success) => {

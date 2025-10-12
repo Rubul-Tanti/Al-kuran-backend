@@ -1,4 +1,4 @@
-// Use your existing requires and models above
+
 const teacherModel=require("./db/teacerScheama")
 const studentModel=require("./db/studenSchema")
 const chatModel=require("./db/Chats")
