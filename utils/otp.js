@@ -6,7 +6,7 @@ const Mail = require("nodemailer/lib/mailer");
 const transporter = nodemailer.createTransport({
         service:"gmail",
         port:"465",
-        secure:false,
+        secure:true,
         auth:{
           user:"hashenger@gmail.com"
           , pass:"svtp tusp prny gbin"
