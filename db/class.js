@@ -35,14 +35,13 @@ const classSchema = new mongoose.Schema({
   sessions: [sessionSchema],
   
   student: {
-    id: { type: mongoose.Schema.Types.ObjectId, required: true },
+    id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     name: { type: String, required: true },
     profilePic: String,
-
   },
   
   teacher: {
-    id: { type: mongoose.Schema.Types.ObjectId,  },
+    id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     name: String,
     profilePic: String,
   },
@@ -71,14 +70,12 @@ const classSchema = new mongoose.Schema({
     timezone: { type: String, default: "Asia/Kolkata" },
   },
   
-
+  // Subject and pricing
   subject: { 
     type: String, 
     required: true,
     trim: true 
-  },
-
-  
+  },   
   perHourRate: { 
     type: Number, 
     min: 0,
@@ -90,17 +87,18 @@ const classSchema = new mongoose.Schema({
     min: 0 
   },
 
+  
   // Metadata
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
-  startingDate: { type: Date },
-
+  startingDate: { type: Date },  
   completedAt: { type: Date },
-
-  
   cancellationReason: String,
   cancelledAt: { type: Date },
-  canvelledBy:{type:String}
+  cancelledBy: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User' 
+  },
 }, {
   timestamps: true // Automatically adds createdAt and updatedAt
 });
