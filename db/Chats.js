@@ -24,5 +24,6 @@ const ChatSchema=new mongoose.Schema({
   student:String,
   messages:[chat]
 })
-
+ChatSchema.index({'student':1})
+ChatSchema.index({'teacher':1})
 module.exports=mongoose.model("Chats",ChatSchema)
