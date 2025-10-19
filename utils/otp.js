@@ -1,19 +1,19 @@
 // sendOtpEmail.js
-import { Resend } from "resend";
-import GenerateOtp from "./createOtp.js";
-import dotenv from "dotenv";
-import { ApiError } from "../middleware/Error.js";
+const { Resend } =require("resend")
+const GenerateOtp =require("./createOtp.js")
+const dotenv =require ("dotenv");
+const { ApiError } =require("../middleware/Error.js");
 
 dotenv.config();
 
 // Initialize Resend with API key
 const resend = new Resend(process.env.RESEND_API_KEY);
-
+console.log(process.env.RESEND_API_KEY,"rubulM")
 const sendOtpEmail = async (email, length) => {
   try {
     const otp = await GenerateOtp(length);
 
-    const response = await resend.emails.send({
+    const {error,data} = await resend.emails.send({
       from: "Resend <onboarding@resend.dev>",       // verified Resend sender
       to: email,
       subject: "Qtuor - Your OTP Code",
@@ -28,11 +28,12 @@ const sendOtpEmail = async (email, length) => {
           <p>Best Regards,</p>
           <p><a href="https://www.qtuor.com" style="color: #2563eb; text-decoration: none;">Qtuor Team</a></p>
         </div>
-      `,
-      reply_to: process.env.CLIENT_EMAIL,  // your existing client email
+      `
     });
-
-    console.log("📩 OTP Email sent via Resend:", response.id);
+  if (error) {
+    return console.error({ error });
+  }
+    console.log("📩 OTP Email sent via Resend:", data);
     return { info: response, otp };
   } catch (error) {
     console.error("❌ Failed to send OTP email:", error);
@@ -40,4 +41,4 @@ const sendOtpEmail = async (email, length) => {
   }
 };
 
-export default sendOtpEmail;
+module.exports= sendOtpEmail;

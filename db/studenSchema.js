@@ -12,20 +12,8 @@ const StudentSchema = new mongoose.Schema({
         dob: { type: Date }, // for age-based tracking
         country: { type: String }, // helpful for time zone handling,
         createdAt: { type: Date, default: Date.now },
-    }, ongoingCourses: [{
-        classTime: { type: String, required: true },
-        classDoneTill: { type: String, required: true },
-        courseName: { type: String, required: true },
-        courseDescription: { type: String, required: true },
-        courseTeacher: { teacherId: { type: String, required: true } },
-        courseDuration: { type: String, required: true }
-    }]
-    , completedCourse: [{
-        courseName: { type: String, required: true },
-        courseDescription: { type: String, required: true },
-        courseTeacher: { teacherId: { type: String, required: true } },
-        courseDuration: { type: String, required: true }
-    }],role: { type: String, enum: ["student", "teacher","admin"], default: "student" },
+    },  
+    role: { type: String, enum: ["student", "teacher","admin"], default: "student" },
     QtuorCourse:[{courseId:{type:mongoose.Schema.Types.ObjectId,ref:"course"},courseName:{type:String,
         required:true},courseDescription:{type:String,required:true},
         courseDuration:{type:String,required:true}}],chats:[chat],
