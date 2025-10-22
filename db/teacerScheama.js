@@ -1,48 +1,13 @@
 const mongoose = require("mongoose")
 
-const course = {
-  startingDate:{type:Date},
-  classTime:[ { type: String, required: true }],
-  hourlyRate: { type: Number },
-  courseName: { type: String, required: true, enum: ["Noorani Qaida", "Arabic Course", "Tajweed Course", "Hifz Course"] },
-  numberOfClass:{type:String},
-  doneNumberOfClass:{type:String}   
-}
-const liveClass = {
-  studentDetail: {
-    studentName: { type: String },
-    studenProfilePic: { type: String, required: true },
-    studentId: { type: mongoose.Types.ObjectId },
-    country: { type: String, required: true }
-  },
-  status: { type: String, enum: ["ongoing", "completed"] },
-  courseDetail: course,
-  hourlyRate: { type: String, required: true }
-}
+
+
 
 const chat=new mongoose.Schema(
   {name:String,profilePic:String,id:mongoose.Schema.ObjectId,chatId:mongoose.Schema.ObjectId,socketId:String})
-const completed=new mongoose.Schema({
-  studentId:String,
-  studentName:String,
-  subject:String,
-  hourlyrate:String,
-  durationInDays:String,
-  numberOfClass:String,
-  endDate:String,
-})
-const classObj=new mongoose.Schema({
-  studentId:String,
-  studentName:String,
-  studentProfilePic:String,
-  classTime:String,
-  done:{type:String,default:false},
-  subject:String,
-  startingDate:{type:Date}
-  ,active:{type:Boolean,default:false}
-})
+
+
 const teacherSchema = new mongoose.Schema({
-  classes:[classObj],
   password: { type: String, required: true, min: [8, "password cannot be less than 8 characters"], max: [12, "password cannot be more than 12 characters"] },
   rating: { type: Number, default: 0 },
   verified: { type: Boolean, default: false },
@@ -75,9 +40,8 @@ const teacherSchema = new mongoose.Schema({
     bio: { type: String,required: true}, 
     specializations:[{type:String,required:true}],
   },
-  taught:[completed],
-  todayClass:[classObj],
-  currentStudents:[liveClass]
+  taught:[{studentId:{type:String,required:true},studentName:{type:String,required:true},studentProfilePic:{type:String,required:true}}],
+  currentStudents:[{studentId:{type:String,required:true},studentName:{type:String,required:true},studentProfilePic:{type:String,required:true}}]
   ,chats:[chat]
   ,socketId:String
   ,online:{type:Boolean,default:false}

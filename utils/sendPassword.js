@@ -3,6 +3,21 @@ const { EMAILCLR, EMAIL, EMAILPASS, EMAILPORT } = require("../config/envConfig")
 const { ApiError } = require("../middleware/Error");
 const transporter=require("../config/emailTransponder")
 
+//  const transporter = nodemailer.createTransport({
+//   host: EMAILCLR,
+//    port: EMAILPORT,
+//   secure: EMAILPORT == 465,
+//   auth: {
+//      user: EMAIL,
+//    pass: EMAILPASS,
+//  },
+//   pool: true,
+//  maxConnections: 5,
+//  maxMessages: 100,
+//   rateLimit: 10,
+
+
+
       
 transporter.verify((error, success) => {
   if (error) {

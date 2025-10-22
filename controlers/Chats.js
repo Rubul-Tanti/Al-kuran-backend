@@ -61,4 +61,5 @@ res.status(200).json({success:true,message:"fetch successfully chats",data:chat}
   }
 }
 
+
 module.exports = { createChat,fetchChat }

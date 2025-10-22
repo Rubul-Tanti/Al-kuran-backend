@@ -115,36 +115,59 @@ const fetchJob = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
+const SendProposal = async (req, res) => {
+  try {
+    console.log("pass");
+    const { proposal, postId, userId, username, userImage } = req.body;
 
-const SendProposal=async(req,res)=>{
-try{
-  console.log("pass")
-  const {proposal,postId,userId,username,userImage}=req.body
-  if(!proposal||!postId||!userId||!username||!userImage){
-    return res.status(500).json({message:'Enter All Fields'})
+    if (!proposal || !postId || !userId || !username || !userImage) {
+      return res.status(400).json({ success: false, message: "Enter all fields" });
+    }
+
+    // Check if the user already applied for this post
+    const job = await jobModule.findById(postId);
+    if (!job) {
+      return res.status(404).json({ success: false, message: "Job not found" });
+    }
+
+    const alreadyApplied = job.applicants.find((app)=>app.id==userId)
+
+console.log(alreadyApplied)
+    if (alreadyApplied) {
+      return res.status(400).json({
+        success: false,
+        message: "You have already sent a proposal for this job",
+      });
+    }
+
+    // Push the new proposal if not already applied
+    job.applicants.push({
+      name: username,
+      id: userId,
+      profilePic: userImage,
+      proposal,
+    });
+
+    await job.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Proposal sent successfully",
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: e.message,
+    });
   }
-  const post = await jobModule.findByIdAndUpdate(
-      postId,
-      {
-        $push: {
-          applicants: {
-            name: username,
-            id: userId,
-            profilePic: userImage,
-            proposal,
-          },
-        },
-      },
-      { new: true } // return updated doc
-    );
-  if(!post){throw new ApiError("internal server Error ",501) } 
-  res.status(200).json({success:true,message:"proposal sent successfully"})
-}catch(e){ApiError(e.message,500)}
-}
+};
+
 const nothire=async(req,res)=>{
     try {
     const { jobId, proposalId } = req.body;
-
+      console.log(proposalId)
     if (!jobId || !proposalId) {
       return res.status(400).json({ success: false, message: "Job ID and Proposal ID are required" });
     }
@@ -152,10 +175,9 @@ const nothire=async(req,res)=>{
     // Find job and pull applicant with matching proposalId
     const updatedJob = await jobModule.findByIdAndUpdate(
       jobId,
-      { $pull: { applicants: { _id: proposalId } } },
+      { $pull: { applicants: {id: proposalId } } },
       { new: true }
     );
-
     if (!updatedJob) {
       return res.status(404).json({ success: false, message: "Job post not found" });
     }
