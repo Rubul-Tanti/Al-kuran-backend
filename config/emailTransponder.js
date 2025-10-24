@@ -1,5 +1,6 @@
 const nodemailer = require("nodemailer");
-const env=require("dotenv")
+const env=require("dotenv");
+const { EMAIL, EMAILPASS, EMAILCLR, EMAILPORT } = require("./envConfig");
 env.config()
 
  const transporter = nodemailer.createTransport({
@@ -17,6 +18,15 @@ env.config()
   maxConnections: 5,
   maxMessages: 100,
   rateLimit: 10,
+});
+      
+transporter.verify((error, success) => {
+  if (error) {
+    console.error("❌ Email server not ready:", error);
+  } else {
+    console.log(EMAIL,EMAILPASS,EMAILCLR,EMAILPORT)
+    console.log("✅ Email server ready for sending messages");
+  }
 });
 
     // const transporter = nodemailer.createTransport({

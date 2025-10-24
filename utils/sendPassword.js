@@ -18,14 +18,7 @@ const transporter=require("../config/emailTransponder")
 
 
 
-      
-transporter.verify((error, success) => {
-  if (error) {
-    console.error("❌ Email server not ready:", error);
-  } else {
-    console.log("✅ Email server ready for sending messages");
-  }
-});
+
 
 /**
  * Send secure password email

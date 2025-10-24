@@ -11,7 +11,7 @@ const verifyOtpAndRegisterTeacher = require("../controlers/verifyotpAndRegisterT
 const { teacherList, teacherDetails } = require("../controlers/teacherList")
 const { createChat, fetchChat } = require("../controlers/Chats")
 const { generateToken, listRooms, removeParticipant, endRoom } = require("../controlers/livekit")
-const {updateClass,createClass, getproposalDetails, fetchClasses, aproveClass, requestChangesClass} = require("../controlers/Class")
+const {updateClass,createClass, getproposalDetails, fetchClasses, aproveClass, requestChangesClass, getClassDetails} = require("../controlers/Class")
 router.post("/email-verification",asyncError(emailVerification))
 router.post("/verifyStudentAndRegisterStudent",asyncError(verifyStudentAndRegisterStudent))
 router.post("/login",asyncError(Login))
@@ -50,5 +50,5 @@ router.post("/get-proposal-detail",asyncError(getproposalDetails))
 router.post("/fetch-classes",asyncError(fetchClasses))
 router.post("/aprove-class",asyncError(aproveClass))
 router.post('/request-changes-class',asyncError(requestChangesClass))
-
+router.post('/get-classDetails',asyncError(getClassDetails))
 module.exports=router

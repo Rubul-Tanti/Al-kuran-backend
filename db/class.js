@@ -1,11 +1,13 @@
 const mongoose = require("mongoose");
 
+
 // Sessions subdocument schema
 const sessionSchema = new mongoose.Schema({
   date: { type: Date, required: true },
   startTime: { type: String, required: true }, // "10:00 AM"
   endTime: { type: String, required: true }, // "11:00 AM"
   duration: { type: Number }, // in minutes
+  month:[{type:String}],
   status: {
     type: String,
     enum: ["scheduled", "ongoing", "completed", "cancelled", "rescheduled"],
@@ -15,16 +17,7 @@ const sessionSchema = new mongoose.Schema({
     studentPresent: { type: Boolean },
     teacherPresent: { type: Boolean },
   },
-  payment: {
-    transactionId: { type: mongoose.Schema.Types.ObjectId },
-    amount: { type: Number },
-    status: { 
-      type: String, 
-      enum: ["pending", "paid", "refunded"],
-      default: "pending"
-    },
-    paidAt: { type: Date }
-  },
+
   cancelReason: String,
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
@@ -32,8 +25,15 @@ const sessionSchema = new mongoose.Schema({
 
 // Main Class schema
 const classSchema = new mongoose.Schema({
+  jobId:{type:mongoose.Types.ObjectId},
+  proposalId:{type:mongoose.Types.ObjectId},
   sessions: [sessionSchema],
-  
+  paidFor:Number,
+    planStatus: {
+    type: String,
+    enum: ["pending", "active", "expired"],
+    default: "pending"
+  },
   student: {
     id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     name: { type: String, required: true },
@@ -76,18 +76,15 @@ const classSchema = new mongoose.Schema({
     required: true,
     trim: true 
   },   
-  perHourRate: { 
+  perMonthRate: { 
     type: Number, 
     min: 0,
     required: true 
   },
-  completedHours: { 
-    type: Number, 
-    default: 0,
-    min: 0 
+  payment:{
+    paid:{type:Boolean,},
+    transactionId:{type:mongoose.Types.ObjectId}
   },
-
-  
   // Metadata
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
@@ -114,6 +111,22 @@ classSchema.index({ createdAt: -1 });
 classSchema.pre('save', function(next) {
   this.updatedAt = Date.now();
   next();
+});
+classSchema.pre("save", function (next) {
+  if(this.sessions.length>0){
+  const currentDate = new Date();
+  // Sort sessions by date to pick the last one properly
+  this.sessions.sort((a, b) => new Date(a.date) - new Date(b.date));
+  const lastSession = this.sessions[this.sessions.length - 1];
+
+  const fullyUsed = this.sessions.length >= this.paidFor;
+  const lastSessionEnded = lastSession.date && new Date(lastSession.date) < currentDate;
+
+  if (fullyUsed && lastSessionEnded) {
+    this.planStatus = "expired";
+  }
+}
+next();
 });
 
 const Class = mongoose.model('Class', classSchema);

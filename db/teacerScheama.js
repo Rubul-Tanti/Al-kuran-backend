@@ -6,7 +6,6 @@ const mongoose = require("mongoose")
 const chat=new mongoose.Schema(
   {name:String,profilePic:String,id:mongoose.Schema.ObjectId,chatId:mongoose.Schema.ObjectId,socketId:String})
 
-
 const teacherSchema = new mongoose.Schema({
   password: { type: String, required: true, min: [8, "password cannot be less than 8 characters"], max: [12, "password cannot be more than 12 characters"] },
   rating: { type: Number, default: 0 },
@@ -18,7 +17,7 @@ const teacherSchema = new mongoose.Schema({
      email: { type: String, required: true }
      ,dob: { type: Date, required: true },
      country: { type: String, required: true },
-     profilePic: { type: String },
+     profilePic: { type: String ,default:'https://res.cloudinary.com/dtndjkokp/image/upload/v1761327695/defaultprofile_jlq8ct.png'},
      phone: { type: String, required: true },
      languageSpoken:[ { type: String, required: true }]
   },
@@ -34,7 +33,7 @@ const teacherSchema = new mongoose.Schema({
   }],
   profesnalDetails:{
     profesnalEmail:{type:String,},
-    hourlyRate:{type:String,required:true},
+    MonthlyRate:{type:String,required:true},
     cirtificates: [{ type: String }],
     educationDetails: { type: String, required: true },
     bio: { type: String,required: true}, 

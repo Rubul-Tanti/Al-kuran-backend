@@ -5,7 +5,7 @@ const JobModule = require("../db/jobPost");
 const { ApiError, asyncError } = require("../middleware/Error");
 const createClass=async(req,res)=>{
     try{
-        const {
+        const {jobId,proposalId,
   studentId,
   studentName,
   studentProfilePic,
@@ -15,7 +15,7 @@ const createClass=async(req,res)=>{
   classDays,
   classTime,
   subject,
-  perHourRate,
+  perMonthRate,
   startingDate
 } = req.body;
 
@@ -23,15 +23,13 @@ if (
     !startingDate||
   !studentId ||
   !studentName ||
-  !studentProfilePic ||
   !teacherId ||
   !teacherName ||
-  !teacherProfilePic ||
   !classDays?.length>0 ||
   !classTime ||
   !subject ||
-  !perHourRate
-) {
+  !perMonthRate ||
+  !jobId || !proposalId){
   return res.status(400).json({ message: "Enter all fields" });
 }
 console.log(  studentId,
@@ -43,7 +41,7 @@ console.log(  studentId,
   classDays,
   classTime,
   subject,
-  perHourRate,
+  perMonthRate,
   startingDate  )
 const newClass=await Class.create({
     student:{
@@ -59,8 +57,9 @@ const newClass=await Class.create({
     classDays,
     classTime,
     subject,
-    perHourRate,
-    startingDate
+    perMonthRate,
+    startingDate,
+    jobId,proposalId,
 })
 if(!newClass){return res.status(401).json({success:false,message:"internal server Error Please Try Later"})}
 res.status(200).json({message:"successfully created class",success:true,data:newClass})
@@ -87,7 +86,7 @@ const updateClass=async(req,res)=>{
   classDays,
   classTime,
   subject,
-  perHourRate,
+  perMonthRate,
   startingDate
 } = req.body;
 
@@ -102,7 +101,7 @@ if (!classId||
   !classDays?.length>0 ||
   !classTime ||
   !subject ||
-  !perHourRate
+  !perMonthRate
 ) {
   return res.status(400).json({ message: "Enter all fields" });
 }
@@ -121,7 +120,7 @@ const updatedClass=await Class.findByIdAndUpdate(classId,{
     classDays,
     classTime,
     subject,
-    perHourRate,
+    perMonthRate,
     startingDate
 })
 if(!updatedClass){return res.status(401).json({success:false,message:"internal server Error Please Try Later"})}
@@ -154,11 +153,13 @@ const getproposalDetails=async(req,res)=>{
     const {jobId,proposalId}=req.body
     console.log(jobId,proposalId)
     if(!jobId||!proposalId){return res.status(400).json({message:"enter all fields",success:false})}
+      const alreadyexist=await Class.findOne({jobId,proposalId,})
+if(alreadyexist){return res.status(202).json({success:false,message:'already Class Created for this Proposal',data:'already-exist'})}
     const jobDetails=await JobModule.findById(jobId)
     if(!jobDetails){return res.status(401).json({message:"internal server error",success:false})}
     const proposal=jobDetails.applicants.find(p=> p._id==proposalId )
     if(!proposal){return res.status(402).json({message:"internal server error",success:false})}
-        const data={teacher:proposal,student:jobDetails.postedBy,perHourRate:jobDetails.budget,subject:jobDetails.course }
+        const data={teacher:proposal,student:jobDetails.postedBy,perMonthRate:jobDetails.budget,subject:jobDetails.course }
     res.status(200).json({message:"successfully fetch proposal details",data,success:true})
     }catch(e){
         throw ApiError(e.message,500)
@@ -215,5 +216,16 @@ const requestChangesClass=async(req,res)=>{
   }
 }
 
+const getClassDetails=async(req,res)=>{
+  try{
+    const [classId]=req.body
+    if(!classId){return res.status(400).json({message:'enter all fields'})}
+    const classObj=await Class.findById(classId)
+    if(!classObj){return res.status(401).json({message:'server error'})}
+    res.status(200).json({success:true,data:classObj})
+  }catch(e){
+throw new ApiError(e.message,500)
+  }
+}
 
-module.exports ={createClass,updateClass,addSession,getproposalDetails,fetchClasses,aproveClass,requestChangesClass}
+module.exports ={createClass,getClassDetails,updateClass,addSession,getproposalDetails,fetchClasses,aproveClass,requestChangesClass}
