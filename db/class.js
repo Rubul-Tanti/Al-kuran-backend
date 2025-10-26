@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 // Sessions subdocument schema
 const sessionSchema = new mongoose.Schema({
-  date: { type: Date, required: true },
+  date: { type:String, required: true },
   startTime: { type: String, required: true }, // "10:00 AM"
   endTime: { type: String, required: true }, // "11:00 AM"
   duration: { type: Number }, // in minutes

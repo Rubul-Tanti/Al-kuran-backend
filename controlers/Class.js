@@ -73,16 +73,6 @@ const updateClass=async(req,res)=>{
        try{
         const {
             classId,
-     student:{
-        id:studentId
-        ,name:studentName
-        ,profilePic:studentProfilePic
-    },
-    teacher:{
-        id:teacherId,
-        name:teacherName,
-        profilePic:teacherProfilePic
-    },
   classDays,
   classTime,
   subject,
@@ -92,12 +82,6 @@ const updateClass=async(req,res)=>{
 
 if (!classId||
     !startingDate||
-  !studentId ||
-  !studentName ||
-  !studentProfilePic ||
-  !teacherId ||
-  !teacherName ||
-  !teacherProfilePic ||
   !classDays?.length>0 ||
   !classTime ||
   !subject ||
@@ -107,16 +91,6 @@ if (!classId||
 }
 
 const updatedClass=await Class.findByIdAndUpdate(classId,{
-    student:{
-        id:studentId
-        ,name:studentName
-        ,profilePic:studentProfilePic
-    },
-    teacher:{
-        id:teacherId,
-        name:teacherName,
-        profilePic:teacherProfilePic
-    },
     classDays,
     classTime,
     subject,
@@ -130,7 +104,6 @@ res.status(200).json({message:"successfully created class",success:true,data:upd
         throw new ApiError(e.message,500)
     }
 }
-
 const addSession=async(req,res)=>{
     try{
         const {date,startTime,endTime,duration,status,attendance,classId}=req.body
@@ -144,10 +117,7 @@ const addSession=async(req,res)=>{
 throw new ApiError(e.message,500)
  }
 }
- 
-const updatedSession=async()=>{
-     const {date,startTime,endTime,duration,status,attendance,classId,payment}=req.body
-}
+
 const getproposalDetails=async(req,res)=>{
     try{
     const {jobId,proposalId}=req.body
@@ -218,7 +188,7 @@ const requestChangesClass=async(req,res)=>{
 
 const getClassDetails=async(req,res)=>{
   try{
-    const [classId]=req.body
+    const {classId}=req.body
     if(!classId){return res.status(400).json({message:'enter all fields'})}
     const classObj=await Class.findById(classId)
     if(!classObj){return res.status(401).json({message:'server error'})}
