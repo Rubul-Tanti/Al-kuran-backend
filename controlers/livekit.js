@@ -4,6 +4,9 @@ const {
   RoomServiceClient,
   RoomParticipantPermission,
 } = require("livekit-server-sdk");
+const StudentModel = require("../db/studenSchema");
+const teacherModel = require("../db/teacerScheama");
+const ClassModel = require("../db/class");
 
 dotenv.config();
 
@@ -16,11 +19,23 @@ const roomService = new RoomServiceClient(livekitHost, apiKey, apiSecret);
 // Generate join token
 exports.generateToken = async (req, res) => {
   try {
-    const { identity, roomName } = req.body;
+    const { identity, roomName,role } = req.body;
+    console.log(identity,roomName)
     if (!identity || !roomName) {
       return res.status(400).json({ message: "identity and roomName required" });
     }
+    let user;
+    const classObj=await ClassModel.findById(roomName)
+if(JSON.stringify(classObj[role].id)!==JSON.stringify(identity)){
+  return res.status(402).json({message:'unauthorized'})
+}
+console.log(classObj[role])
 
+ if(role=='student'){
+  const user=await StudentModel.findById(identity)
+ }else if(role=='teacher'){
+  const user =await teacherModel.findById(identity)
+ }
     const at = new AccessToken(apiKey, apiSecret, { identity });
     at.addGrant({
       roomJoin: true,

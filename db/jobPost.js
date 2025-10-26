@@ -25,6 +25,7 @@ const jobSchema = new mongoose.Schema({
   budget: {
     type: String,
     required: true,
+    min:1
   },
   course: {
     type: String,

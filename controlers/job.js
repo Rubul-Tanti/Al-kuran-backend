@@ -5,8 +5,7 @@ const { ApiError } = require("../middleware/Error");
 const createJob = async (req, res, next) => {
   try {
     const { name, id, title, description, language, course, budget ,profilePic,socketId} = req.body;
-    console.log(req.body)
-    if (!name || !id || !title || !description || !language || !course || !budget||!profilePic||!socketId) {
+    if (!name || !id || !title || !description || !language || !course || !budget) {
       return res.status(400).json({ message: "Enter all fields", success: false });
     }
 
@@ -119,8 +118,8 @@ const SendProposal = async (req, res) => {
   try {
     console.log("pass");
     const { proposal, postId, userId, username, userImage } = req.body;
-
-    if (!proposal || !postId || !userId || !username || !userImage) {
+console.log(proposal, postId, userId, username, userImage )
+    if (!proposal || !postId || !userId || !username) {
       return res.status(400).json({ success: false, message: "Enter all fields" });
     }
 

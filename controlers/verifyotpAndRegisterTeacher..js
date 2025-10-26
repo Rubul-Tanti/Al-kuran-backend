@@ -23,9 +23,6 @@ const verifyOtpAndRegisterTeacher = async (req, res) => {
       rate,
     } = req.body;
 
-
-
-   console.log(req.body,"rubul")
    console.log("name",name,"email:",email,"dob:",dob,"country:",country,"gender:",gender,"bio:",bio,"educationDetails:",educationDetails,"otp:",otp,languages)
     if (
       !email || !dob || !name || !bio || !gender || !otp ||
@@ -43,6 +40,7 @@ const verifyOtpAndRegisterTeacher = async (req, res) => {
 
     // OTP validation
     const otpObject = await otpModule.findOne({ email });
+    console.log(otpObject)
     if (!otpObject) {
       return res.status(400).json({ success: false, message: "OTP expired or invalid" });
     }
@@ -65,17 +63,19 @@ console.log(otp,otpObject.otp)
       let certificates = [];
 
       if (!files || files.length === 0) return { profilePicture, certificates };
+else{
 
-      await Promise.all(
-        files.map(async (file) => {
-          const cloudinaryResult = await uploadToCloudinary(file);
-          if (file.fieldname === "profilePicture") {
-            profilePicture = cloudinaryResult;
-          } else {
-            certificates.push(cloudinaryResult);
-          }
-        })
-      );
+  await Promise.all(
+    files.map(async (file) => {
+      const cloudinaryResult = await uploadToCloudinary(file);
+      if (file.fieldname === "profilePicture") {
+        profilePicture = cloudinaryResult;
+      } else {
+        certificates.push(cloudinaryResult);
+      }
+    })
+  );
+}
 
       return { profilePicture, certificates };
     };
@@ -83,6 +83,7 @@ console.log(otp,otpObject.otp)
     const resu = await getImageurl();
 
     // Create teacher
+    console.log(rate)
     const newTeacher = await teacherModel.create({
       persnalDetails: {
         name,
@@ -99,7 +100,7 @@ console.log(otp,otpObject.otp)
         bio,
         certificates: resu?.certificates,
         educationDetails,
-        hourlyRate: rate,
+        MonthlyRate: rate,
       },
       password: hashedPassword,
     });
@@ -114,6 +115,7 @@ console.log(otp,otpObject.otp)
     return res.status(200).json({ message: "OTP matched", success: true, data: newTeacher });
   } catch (e) {
     console.error("Error in register teacher:", e);
+
     return res.status(500).json({ success: false, message: e.message || "Internal server error" });
   }
 };
